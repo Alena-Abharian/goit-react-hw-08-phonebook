@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchContacts, addNewContacts, deleteContacts } from './operations';
+import { fetchContacts, addNewContacts, deleteContacts } from './contactsOperations';
 
 const setError = (state, action) => {
   state.status = 'rejected';

@@ -1,9 +1,10 @@
 import React from 'react';
+import s from './ContactList.module.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteContacts } from '../../redux/contacts/contactsOperations';
+import { deleteContacts } from '../../redux/operations';
 import { filterContactsSelector, getItemsSelector } from '../../redux/selectors';
-import { List } from 'antd';
-import Avatar from 'react-avatar';
+
+
 
 const ContactList = () => {
   const dispatch = useDispatch();
@@ -11,20 +12,16 @@ const ContactList = () => {
   const filter = useSelector(filterContactsSelector);
 
   return (
-    <List>
+    <ul>
       {contacts
         .filter(contact => contact.name.toLowerCase().includes(filter.toLowerCase()))
         .map(({ id, name, number }) => (
-          <List.Item key={id}>
-            <Avatar name={name} size='40' />
-            <List.Item.Meta
-              title={<a href='https://ant.design'>{`${name}`}</a>}
-              description={`${number}`}
-            />
-            <button onClick={() => dispatch(deleteContacts(id))}>delete</button>
-          </List.Item>
+          <li className={s.item} key={id}>
+            <span>&bull; {`${name}: ${number}`}</span>
+            <button className={s.btn} onClick={() => dispatch(deleteContacts(id))}>delete</button>
+          </li>
         ))}
-    </List>
+    </ul>
   );
 };
 
