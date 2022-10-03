@@ -1,7 +1,7 @@
-import React, { useState} from 'react';
+import React, { useState } from 'react';
 import { nanoid } from 'nanoid';
 import s from './ContactForm.module.css';
-import { addNewContacts } from '../../redux/operations';
+import { addNewContacts } from '../../redux/contacts/contactsOperations';
 import { useDispatch } from 'react-redux';
 
 const ContactForm = () => {
@@ -33,9 +33,8 @@ const ContactForm = () => {
     e.preventDefault();
 
     const newContact = {
-      id: nanoid(),
       name: name,
-      phone: number,
+      number: number,
     };
     dispatch(addNewContacts(newContact));
     reset();
