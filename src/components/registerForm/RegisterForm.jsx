@@ -2,6 +2,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Button, Form, Input } from 'antd';
 import { register } from '../../redux/auth/authOperations';
+import s from './RegisterForm.module.css';
 
 const RegisterForm = () => {
   const dispatch = useDispatch();
@@ -17,21 +18,12 @@ const RegisterForm = () => {
   return (
     <Form
       name='basic'
-      labelCol={{
-        span: 9,
-      }}
-      wrapperCol={{
-        span: 5,
-      }}
-      initialValues={{
-        remember: true,
-      }}
+      className={s.container}
       onFinish={handleSubmit}
       onFinishFailed={onFinishFailed}
       autoComplete='off'
     >
       <Form.Item
-        label='Name'
         name='name'
         rules={[
           {
@@ -41,10 +33,9 @@ const RegisterForm = () => {
           },
         ]}
       >
-        <Input />
+        <Input placeholder='Name' />
       </Form.Item>
       <Form.Item
-        label='Email'
         name='email'
         rules={[
           {
@@ -53,11 +44,10 @@ const RegisterForm = () => {
           },
         ]}
       >
-        <Input />
+        <Input placeholder='Email' />
       </Form.Item>
 
       <Form.Item
-        label='Password'
         name='password'
         rules={[
           {
@@ -66,14 +56,9 @@ const RegisterForm = () => {
           },
         ]}
       >
-        <Input.Password />
+        <Input.Password placeholder='Password' />
       </Form.Item>
-      <Form.Item
-        wrapperCol={{
-          offset: 9,
-          span: 5,
-        }}
-      >
+      <Form.Item>
         <Button type='primary' htmlType='submit' block>
           Register
         </Button>

@@ -6,9 +6,8 @@ import book from '../../assets/pngegg.png';
 import s from './Home.module.css';
 import { isLoggedSelector } from '../../redux/selectors';
 
-
 const Home = () => {
-  const isLogged = useSelector(isLoggedSelector)
+  const isLogged = useSelector(isLoggedSelector);
   const navigate = useNavigate();
   return (
     <div className={s.wrap}>

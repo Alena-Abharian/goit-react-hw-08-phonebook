@@ -2,6 +2,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { login } from '../../redux/auth/authOperations';
 import { Button, Form, Input } from 'antd';
+import s from './LoginForm.module.css';
 
 const LoginForm = () => {
   const dispatch = useDispatch();
@@ -16,22 +17,12 @@ const LoginForm = () => {
 
   return (
     <Form
+      className={s.container}
       name='basic'
-      labelCol={{
-        span: 9,
-      }}
-      wrapperCol={{
-        span: 5,
-      }}
-      initialValues={{
-        remember: true,
-      }}
       onFinish={handleSubmit}
       onFinishFailed={onFinishFailed}
-      autoComplete='off'
     >
       <Form.Item
-        label='Email'
         name='email'
         rules={[
           {
@@ -40,11 +31,10 @@ const LoginForm = () => {
           },
         ]}
       >
-        <Input />
+        <Input placeholder='Email' />
       </Form.Item>
 
       <Form.Item
-        label='Password'
         name='password'
         rules={[
           {
@@ -53,14 +43,9 @@ const LoginForm = () => {
           },
         ]}
       >
-        <Input.Password />
+        <Input.Password placeholder='Password' />
       </Form.Item>
-      <Form.Item
-        wrapperCol={{
-          offset: 9,
-          span: 5,
-        }}
-      >
+      <Form.Item>
         <Button type='primary' htmlType='submit' block>
           Login
         </Button>
