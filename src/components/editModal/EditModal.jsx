@@ -11,7 +11,7 @@ const EditModal = ({ open, onOk, onCancel, dataModal }) => {
 
   useEffect(() => {
     form.setFieldsValue(dataModal);
-  }, [dataModal]);
+  }, [dataModal, form]);
 
   const notify = ({ message, type, description }) => {
     notification[type]({
