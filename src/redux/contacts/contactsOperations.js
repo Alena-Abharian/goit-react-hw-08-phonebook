@@ -39,3 +39,16 @@ export const deleteContacts = createAsyncThunk(
   },
 );
 
+export const updateContacts = createAsyncThunk(
+  'update/updateContacts',
+  async (payload, thunkAPI) => {
+    try {
+      const { id, ...data } = payload;
+      await axios.patch(`${BASIC_URL}/contacts/${id}`, data);
+      return { ...payload };
+    } catch (err) {
+      return thunkAPI.rejectWithValue('Sorry, can\'t update contact, server Error!');
+    }
+  },
+);
+

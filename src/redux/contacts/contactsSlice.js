@@ -1,9 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchContacts, addNewContacts, deleteContacts } from './contactsOperations';
+import { fetchContacts, addNewContacts, deleteContacts, updateContacts } from './contactsOperations';
 
 const setError = (state, action) => {
   state.status = 'rejected';
   state.error = action.payload;
+  console.log('rejected');
 };
 
 const contactsSlice = createSlice({
@@ -38,10 +39,6 @@ const contactsSlice = createSlice({
     },
     [addNewContacts.fulfilled]: (state, action) => {
       state.status = 'resolved';
-      const isContactExist = state.item.find(({ name }) => name.toLowerCase() === action.payload.name.toLowerCase());
-      if (isContactExist) {
-        return alert(`${action.payload.name} is already in contacts.`);
-      }
       state.item.push(action.payload);
     },
     [addNewContacts.rejected]: setError,
@@ -56,6 +53,18 @@ const contactsSlice = createSlice({
       state.item = state.item.filter(contact => contact.id !== action.payload.id);
     },
     [deleteContacts.rejected]: setError,
+
+    //update
+    [updateContacts.pending]: (state) => {
+      state.status = 'loading';
+      state.error = null;
+    },
+    [updateContacts.fulfilled]: (state, action) => {
+      state.status = 'resolved';
+      console.log('fulfilled');
+      state.item = state.item.map((contact) => (contact.id === action.payload.id ? action.payload : contact));
+    },
+    [updateContacts.rejected]: setError,
   },
 });
 

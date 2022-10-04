@@ -1,81 +1,85 @@
-import React, { useState } from 'react';
-import { nanoid } from 'nanoid';
-import s from './ContactForm.module.css';
+import React from 'react';
 import { addNewContacts } from '../../redux/contacts/contactsOperations';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { Button, Form, Input, notification } from 'antd';
+import { getContactsSelector } from '../../redux/selectors';
 
 const ContactForm = () => {
-  const [name, setName] = useState('');
-  const [number, setNumber] = useState('');
   const dispatch = useDispatch();
+  const [form] = Form.useForm();
+  const { status, item: contacts } = useSelector(getContactsSelector);
 
-  const nameInputId = nanoid();
-  const numberInputId = nanoid();
 
-  const handleChange = (e) => {
-    const { name, value } = e.currentTarget;
+  const notify = ({ message, type, description }) => {
+    notification[type]({
+      message,
+      description,
+    });
+  };
 
-    switch (name) {
-      case 'name':
-        setName(value);
-        break;
+  const handleSubmit = ({ name, number }) => {
+    const isContactExist = contacts.find((contact) => contact.name.toLowerCase() === name.toLowerCase());
+    form.resetFields();
 
-      case 'number':
-        setNumber(value);
-        break;
-
-      default:
-        return;
+    if (isContactExist) {
+      notify({
+        type: 'warning',
+        message: `${name} is already in contacts.`,
+      });
+    } else {
+      dispatch(addNewContacts({ name, number }));
+      notify({
+        type: 'success',
+        message: 'The contact has been successfully added',
+      });
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    const newContact = {
-      name: name,
-      number: number,
-    };
-    dispatch(addNewContacts(newContact));
-    reset();
-  };
-
-  const reset = () => {
-    setName('');
-    setNumber('');
-  };
-
   return (
-    <form onSubmit={handleSubmit}>
-      <label className={s.wrap} htmlFor={nameInputId}>
-        Name
-        <input
-          className={s.input}
-          type='text'
-          name='name'
-          pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-          title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-          required
-          value={name}
-          onChange={handleChange}
-        />
-      </label>
-      <label className={s.wrap} htmlFor={numberInputId}>
-        Number
-        <input
-          className={s.input}
-          type='tel'
-          name='number'
-          pattern='\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}'
-          title='Phone number must be digits and can contain spaces, dashes, parentheses and can start with +'
-          required
-          value={number}
-          onChange={handleChange}
-        />
-      </label>
+    <Form
+      form={form}
+      name='add-contact'
+      style={{
+        width: 400,
+      }}
 
-      <button className={s.btn}>Add contact</button>
-    </form>
+      onFinish={handleSubmit}
+    >
+      <Form.Item
+        name='name'
+        rules={[
+          {
+            pattern: new RegExp(/^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$/),
+            message: 'Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d\'Artagnan',
+          },
+          { required: true, message: 'Name number is mandatory field' },
+        ]}
+      >
+        <Input placeholder='Contact name' />
+      </Form.Item>
+
+      <Form.Item
+        name='number'
+        rules={[
+          {
+            required: true,
+            message: 'Phone number is mandatory field',
+          },
+          {
+            pattern: new RegExp(/\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}/),
+            message: 'Phone number must be digits and can contain spaces, dashes, parentheses and can start with +',
+          },
+        ]}
+      >
+        <Input placeholder='Phone number' />
+      </Form.Item>
+
+      <Form.Item>
+        <Button type='primary' htmlType='submit' block disabled={status === 'loading'}>
+          Add contact
+        </Button>
+      </Form.Item>
+    </Form>
   );
 };
 
