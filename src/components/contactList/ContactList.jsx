@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteContacts, updateContacts } from '../../redux/contacts/contactsOperations';
+import { deleteContacts } from '../../redux/contacts/contactsOperations';
 import { filterContactsSelector, getItemsSelector } from '../../redux/selectors';
 import { List, Popover } from 'antd';
 import Avatar from 'react-avatar';
