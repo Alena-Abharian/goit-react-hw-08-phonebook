@@ -28,7 +28,7 @@ const App = () => {
 
   return (
     !isRefreshCurrentUser && (
-      <Layout style={{ minHeight: '750px' }}>
+      <Layout style={{ minHeight: '100vh' }}>
         <Header
           style={{
             width: '100%',
